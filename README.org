@@ -1,0 +1,46 @@
+#+TITLE: timemachine
+
+* What is timemachine?
+
+=timemachine= is a tool that automatically creates a Docker image of a Debian base
+system at a specific time in the past. 
+
+* Why do we need timemachine?
+
+=timemachine= is used to reproduce security vulnerabilities. In order to do so,
+a system with a specific package version, e.g., the vulnerable =glibc= 2.9 in
+the CVE-2015-7547, and more importantly its dependencies must be constructed.
+However, the current Debian package repositories are always up-to-date, e.g.,
+containing the patched version of =glibc=.
+
+* How does it work?
+
+timemachine uses the Debian's =debootstrap= utility to create a base Debian
+system at a specific time in the past, e.g, 20151231, such that the base system
+contains the vulnerable version of a specific package, e.g., =glibc= 2.9. To make
+sure dependencies of the package are consistent, the base system is configured
+to fetch dependencies from a Debian *snapshot* repository.
+
+* Usage
+timemachine can run on any host supporting docker. Two required parameters are
+debian distribution such as =jessie, wheezy, squeeze, lenny= and datetime in
+YYYYMMDD format (e.g., 20151231). Example usage:
+
+#+begin_src sh
+docker run -t --rm --privileged \
+-v /tmp/timemachine/:/tmp/timemachine/ \
+csldepend/timemachine \
+jessie \
+20151231
+#+end_src
+
+The resulting docker image =jessie-20151231.tar= is stored in a mounted volume
+on the host, e.g., /tmp/timemachine. It can be imported to Docker as follows.
+
+#+begin_src sh
+docker import jessie-20151231.tar jessie:20151231
+#+end_src
+
+* Contributors
+
+Phuong Cao <pcao3 at illinois dot edu>
