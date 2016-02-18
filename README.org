@@ -8,24 +8,29 @@ system at a specific time in the past.
 * Why do we need timemachine?
 
 =timemachine= is used to reproduce security vulnerabilities. In order to do so,
-a system with a specific package version, e.g., the vulnerable =glibc= 2.9 in
+a system with a specific package version, e.g., the vulnerable =glibc 2.9= in
 the CVE-2015-7547, and more importantly its dependencies must be constructed.
 However, the current Debian package repositories are always up-to-date, e.g.,
 containing the patched version of =glibc=.
 
 * How does it work?
 
-timemachine uses the Debian's =debootstrap= utility to create a base Debian
-system at a specific time in the past, e.g, 20151231, such that the base system
-contains the vulnerable version of a specific package, e.g., =glibc= 2.9. To make
-sure dependencies of the package are consistent, the base system is configured
-to fetch dependencies from a Debian *snapshot* repository.
+timemachine uses the Debian's =debootstrap= utility to create a Docker image of
+a base Debian system at a specific time in the past, e.g, 20151231, such that
+the base system contains the vulnerable version of a specific package, e.g.,
+=glibc 2.9=. To make sure dependencies of the package are consistent, the base
+system is configured to fetch dependencies from a Debian *snapshot* repository.
 
 * Usage
-timemachine can run on any host supporting docker. Two required parameters are
-debian distribution such as =jessie, wheezy, squeeze, lenny= and datetime in
-YYYYMMDD format (e.g., 20151231). Example usage:
+timemachine can run on any host supporting docker. 
 
+** Generate a Docker image of a base Debian system
+Three required parameters are:
+1. Output directory on the host holding the generated Docker image, e.g., =/tmp/timemachine=
+2. Debian distribution such as =jessie, wheezy, squeeze, lenny= 
+3. datetime in YYYYMMDD format, e.g., =20151231=
+
+Example usage:
 #+begin_src sh
 docker run -t --rm --privileged \
 -v /tmp/timemachine/:/tmp/timemachine/ \
@@ -34,11 +39,16 @@ jessie \
 20151231
 #+end_src
 
-The resulting docker image =jessie-20151231.tar= is stored in a mounted volume
-on the host, e.g., /tmp/timemachine. It can be imported to Docker as follows.
+The resulting docker image =jessie-20151231.tar= is stored in a mounted
+directory on the host, e.g., /tmp/timemachine. Note: if you need to change the output
+directory on the host, use the =-v= flag as folows: =-v <output dir on the
+host>:/tmp/timemachine/= (Don't modify the part after the colon!). 
 
+** Import the image into Docker
+
+Example usage:
 #+begin_src sh
-docker import jessie-20151231.tar jessie:20151231
+docker import /tmp/timemachine/jessie-20151231.tar jessie:20151231
 #+end_src
 
 * Contributors
