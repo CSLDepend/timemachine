@@ -9,8 +9,8 @@ if [ "$#" -ne 2 ]; then
     echo "Example usage: docker run -t --rm --privileged -v $tmp_dir/:$tmp_dir/ csldepend/timemachine $default_distribution $default_datetime"
     exit 1
 fi
-distribution=$2
-datetime=$3
+distribution=$1
+datetime=$2
 
 # create image using debootstrap
 mkdir -p tmp_dir && cd tmp_dir && \
