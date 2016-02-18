@@ -13,7 +13,8 @@ distribution=$1
 datetime=$2
 
 # create image using debootstrap
-mkdir -p tmp_dir && cd tmp_dir && \
+cd $tmp_dir && \
 debootstrap $distribution ${distribution}-${datetime} http://snapshot.debian.org/archive/debian/${datetime}T000000Z/ && \
-tar cvf ${distribution}-${datetime}.tar ${distribution}-${datetime}/* && \
-echo "Image created! Import by: \n docker import $tmp_dir/${distribution}-${datetime}.tar ${distribution}:${datetime}"
+cd ${distribution}-${datetime} && tar cvf ${distribution}-${datetime}.tar * && \
+mv ${distribution}-${datetime}.tar .. && \
+echo "Image created! Import by: docker import $tmp_dir/${distribution}-${datetime}.tar ${distribution}:${datetime}"

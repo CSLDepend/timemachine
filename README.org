@@ -32,11 +32,13 @@ Three required parameters are:
 
 Example usage:
 #+begin_src sh
-docker run -t --rm --privileged \
+$ docker run -t --rm --privileged \
 -v /tmp/timemachine/:/tmp/timemachine/ \
 csldepend/timemachine \
 jessie \
 20151231
+
+Image created! Import by: docker import /tmp/timemachine/jessie-20151231.tar jessie:20151231
 #+end_src
 
 The resulting docker image =jessie-20151231.tar= is stored in a mounted
@@ -48,7 +50,17 @@ host>:/tmp/timemachine/= (Don't modify the part after the colon!).
 
 Example usage:
 #+begin_src sh
-docker import /tmp/timemachine/jessie-20151231.tar jessie:20151231
+$ docker import /tmp/timemachine/jessie-20151231.tar jessie:20151231
+
+386ab9361803666d1bb592b7970f784f9faba6cd0f367aa3ad277762f8476e80
+#+end_src
+
+** Run the created image
+
+#+begin_src sh
+$ docker run -ti jessie:20151231 cat /etc/apt/sources.list
+
+deb http://snapshot.debian.org/archive/debian/20151231T000000Z jessie main
 #+end_src
 
 * Contributors
