@@ -1,4 +1,4 @@
-#+TITLE: timemachine
+#+TITLE: timemachine-debian
 
 * What is timemachine?
 
@@ -20,6 +20,11 @@ a base Debian system at a specific time in the past, e.g, 20151231, such that
 the base system contains the vulnerable version of a specific package, e.g.,
 =glibc 2.9=. To make sure dependencies of the package are consistent, the base
 system is configured to fetch dependencies from a Debian *snapshot* repository.
+
+
+#+CAPTION: timemachine
+#+NAME:   fig:timemachine
+[[[[./img/timemachine.png]]]]
 
 * Usage
 timemachine can run on any host supporting docker. 
